@@ -59,9 +59,9 @@ public class TableroVista extends JPanel {
             {-4, -4, -4, -4, -4, -4, -4, 65, 65, 70, 70, 3, 3, -3, -3, -3, -3, -3, -3, -3},
             {-4, -4, -4, -4, -4, -4, -4, 66, 66, 69, 69, 2, 2, -3, -3, -3, -3, -3, -3, -3},
             {-4, -4, -4, -4, -4, -4, -4, 67, 67, 68, 68, 1, 1, -3, -3, -3, -3, -3, -3, -3}};
-    private Casilla casillas[][];
+    private CasillaVista casillas[][];
     private JuegoVista juegoVista;
-    private Dado dados[];
+    private DadoVista dados[];
     //private boolean habilitado = false; En un futuro para que en el cambio de turno se tenga que poner habilitado si te toca el turno y si no deshabilitado. Introducirlo cuando entren en juego cliente y servidor
 
     public static final boolean RECIBIR_EVENTOS_RATON = true;
@@ -70,7 +70,7 @@ public class TableroVista extends JPanel {
     public TableroVista(JuegoVista juegoVista, int casillas, boolean recibeEventosRaton, int fichas, int dados) {
         this.setEnabled(false);
         this.juegoVista = juegoVista;
-        this.dados = new Dado[dados];
+        this.dados = new DadoVista[dados];
         this.setEnabled(false);
         this.juegoVista = juegoVista;
 
@@ -98,13 +98,13 @@ public class TableroVista extends JPanel {
     private void crearDado(boolean recibeEventosRaton) {
         for (int i = 0; i < dados.length; i++) {
             if (i == 0) {
-                dados[i] = new Dado(juegoVista, i, recibeEventosRaton, "ROJO", XROJO, YROJO);
+                dados[i] = new DadoVista(juegoVista, i, recibeEventosRaton, "ROJO", XROJO, YROJO);
             } else if (i == 1) {
-                dados[i] = new Dado(juegoVista, i, recibeEventosRaton, "AMARILLO", XAMARILLO, YAMARILLO);
+                dados[i] = new DadoVista(juegoVista, i, recibeEventosRaton, "AMARILLO", XAMARILLO, YAMARILLO);
             } else if (i == 2) {
-                dados[i] = new Dado(juegoVista, i, recibeEventosRaton, "AZUL", XAZUL, YAZUL);
+                dados[i] = new DadoVista(juegoVista, i, recibeEventosRaton, "AZUL", XAZUL, YAZUL);
             } else if (i == 3) {
-                dados[i] = new Dado(juegoVista, i, recibeEventosRaton, "VERDE", XVERDE, YVERDE);
+                dados[i] = new DadoVista(juegoVista, i, recibeEventosRaton, "VERDE", XVERDE, YVERDE);
             }
             //add(dados[i]);
 
@@ -112,7 +112,7 @@ public class TableroVista extends JPanel {
     }
 
     public void pintarDado(String color) {
-        Dado dado = obtenerDado(color);
+        DadoVista dado = obtenerDado(color);
         if (dado != null) {
             casillas[dado.getPosicionx()][dado.getPosiciony()].setIcon(new ImageIcon("src/imagenes/dados/" + dado.getColor() + "/" + dado.getTiradaActual() + ".png"));
             casillas[dado.getPosicionx()][dado.getPosiciony()].setEnabled(true);
@@ -126,7 +126,7 @@ public class TableroVista extends JPanel {
         }
     }
 
-    public Dado obtenerDado(String color) {
+    public DadoVista obtenerDado(String color) {
         for (int i = 0; i < dados.length; i++) {
             if (color.equals(dados[i].getColor())) {
                 return dados[i];
@@ -150,42 +150,42 @@ public class TableroVista extends JPanel {
         casillas[1][1].setIcon(fichaRoja);
         casillas[1][1].setEnabled(true);
         casillas[1][1].setEstado("FICHA");
-        Ficha ficha = new Ficha(0, "ROJO");
+        FichaVista ficha = new FichaVista(0, "ROJO");
         casillas[1][1].anyadirFicha(ficha);
         casillas[1][5].setIcon(fichaRoja);
         casillas[1][5].setEnabled(true);
         casillas[1][5].setEstado("FICHA");
-        Ficha ficha2 = new Ficha(1, "ROJO");
+        FichaVista ficha2 = new FichaVista(1, "ROJO");
         casillas[1][5].anyadirFicha(ficha2);
         casillas[5][1].setIcon(fichaRoja);
         casillas[5][1].setEnabled(true);
         casillas[5][1].setEstado("FICHA");
-        Ficha ficha3 = new Ficha(2, "ROJO");
+        FichaVista ficha3 = new FichaVista(2, "ROJO");
         casillas[5][1].anyadirFicha(ficha3);
         casillas[5][5].setIcon(fichaRoja);
         casillas[5][5].setEnabled(true);
         casillas[5][5].setEstado("FICHA");
-        Ficha ficha4 = new Ficha(3, "ROJO");
+        FichaVista ficha4 = new FichaVista(3, "ROJO");
         casillas[5][5].anyadirFicha(ficha4);
         casillas[14][14].setIcon(fichaAmarilla);
         casillas[14][14].setEnabled(true);
         casillas[14][14].setEstado("FICHA");
-        Ficha ficha5 = new Ficha(0, "AMARILLO");
+        FichaVista ficha5 = new FichaVista(0, "AMARILLO");
         casillas[14][14].anyadirFicha(ficha5);
         casillas[14][18].setIcon(fichaAmarilla);
         casillas[14][18].setEnabled(true);
         casillas[14][18].setEstado("FICHA");
-        Ficha ficha6 = new Ficha(1, "AMARILLO");
+        FichaVista ficha6 = new FichaVista(1, "AMARILLO");
         casillas[14][18].anyadirFicha(ficha6);
         casillas[18][14].setIcon(fichaAmarilla);
         casillas[18][14].setEnabled(true);
         casillas[18][14].setEstado("FICHA");
-        Ficha ficha7 = new Ficha(2, "AMARILLO");
+        FichaVista ficha7 = new FichaVista(2, "AMARILLO");
         casillas[18][14].anyadirFicha(ficha7);
         casillas[18][18].setIcon(fichaAmarilla);
         casillas[18][18].setEnabled(true);
         casillas[18][18].setEstado("FICHA");
-        Ficha ficha8 = new Ficha(3, "AMARILLO");
+        FichaVista ficha8 = new FichaVista(3, "AMARILLO");
         casillas[18][18].anyadirFicha(ficha8);
     }
 
@@ -369,19 +369,19 @@ public class TableroVista extends JPanel {
 
     private void crearCasillas(int filas, int columnas, boolean recibeEventosRaton) {
 
-        casillas = new Casilla[filas][columnas];
+        casillas = new CasillaVista[filas][columnas];
         for (int fil = 0; fil < filas; fil++) {
             for (int col = 0; col < columnas; col++) {
                 casillas[fil][col]
-                        = new Casilla(juegoVista, MATRIZ_CASILLAS[fil][col], recibeEventosRaton);
+                        = new CasillaVista(juegoVista, MATRIZ_CASILLAS[fil][col], recibeEventosRaton);
                 add(casillas[fil][col]);
             }
         }
     }
 
-    public void anyadirFicha(int idCasilla, Ficha ficha) {
+    public void anyadirFicha(int idCasilla, FichaVista ficha) {
         devolverCasilla(idCasilla).anyadirFicha(ficha);
-        pintarFicha(idCasilla, ficha);
+//        pintarFicha(idCasilla, ficha);
     }
 
     public void quitarFicha(int idFicha, String color) {
@@ -390,16 +390,13 @@ public class TableroVista extends JPanel {
                 if (casillas[i][j].getFicha() != null) {
                     if (casillas[i][j].getFicha().getId() == idFicha && casillas[i][j].getFicha().getColor().equals(color)) {
                         casillas[i][j].quitarFicha();
-                        borrarFicha(casillas[i][j].getId());
                     }
                 }
             }
         }
-//        borrarFicha(idCasilla);
-//        return devolverCasilla(idCasilla).quitarFicha();
     }
 
-    private Casilla devolverCasilla(int idCasilla) {
+    private CasillaVista devolverCasilla(int idCasilla) {
         for (int i = 0; i < casillas.length; i++) {
             for (int j = 0; j < casillas[i].length; j++) {
                 if (casillas[i][j].getId() == idCasilla) {
@@ -409,136 +406,4 @@ public class TableroVista extends JPanel {
         }
         return null;
     }
-
-    private void borrarFicha(int idCasilla) {
-        borrarCasilla(devolverCasilla(idCasilla));
-    }
-
-    public void pintarFicha(int idCasilla, Ficha ficha) {
-        ImageIcon fichaRoja = new ImageIcon("src/imagenes/ficha_roja.png");
-        ImageIcon fichaAmarilla = new ImageIcon("src/imagenes/ficha_amarilla.png");
-        Casilla casilla = devolverCasilla(idCasilla);
-        if (casilla.getFicha() != null) {
-            for (int i = 0; i < casillas.length; i++) {
-                for (int j = 0; j < casillas[i].length; j++) {
-                    if (casillas[i][j].getId() == idCasilla && casillas[i][j].getFicha() == null) {
-                        System.out.println("Como la casilla esta llena entra aqui");
-                        casilla = casillas[i][j];
-                    }
-                }
-            }
-        }
-        if (ficha.getColor().equals("ROJO")) {
-            casilla.setIcon(fichaRoja);
-            casilla.setEnabled(true);
-            casilla.setEstado("FICHA");
-        } else if (ficha.getColor().equals("AMARILLO")) {
-            casilla.setIcon(fichaAmarilla);
-            casilla.setEnabled(true);
-            casilla.setEstado("FICHA");
-        }
-    }
-
-    private void borrarCasilla(Casilla casilla) {
-        switch (casilla.getId()) {
-            case -1:
-                casilla.setOpaque(true);
-                casilla.setBackground(Color.RED);
-                casilla.setBorder(null);
-                break;
-
-            case -2:
-                casilla.setOpaque(true);
-                casilla.setBackground(Color.BLUE);
-                casilla.setBorder(null);
-                break;
-
-            case -3:
-                casilla.setOpaque(true);
-                casilla.setBackground(Color.YELLOW);
-                casilla.setBorder(null);
-                break;
-
-            case -4:
-                casilla.setOpaque(true);
-                casilla.setBackground(Color.GREEN);
-                casilla.setBorder(null);
-                break;
-
-            case 56:
-                casilla.setOpaque(true);
-                casilla.setBackground(Color.GREEN);
-                casilla.setBorder(null);
-                break;
-
-            case 5:
-                casilla.setOpaque(true);
-                casilla.setBackground(Color.YELLOW);
-                casilla.setBorder(null);
-                break;
-
-            case 22:
-                casilla.setOpaque(true);
-                casilla.setBackground(Color.BLUE);
-                casilla.setBorder(null);
-                break;
-
-            case 39:
-                casilla.setOpaque(true);
-                casilla.setBackground(Color.RED);
-                casilla.setBorder(null);
-                break;
-
-            case 0:
-                casilla.setOpaque(true);
-                casilla.setBackground(Color.BLACK);
-                casilla.setBorder(null);
-                break;
-
-            default:
-                if (casilla.getId() == 46 || casilla.getId() == 51
-                        || casilla.getId() == 63 || casilla.getId() == 68
-                        || casilla.getId() == 12 || casilla.getId() == 17
-                        || casilla.getId() == 29 || casilla.getId() == 34) {
-
-                    casilla.setOpaque(true);
-                    casilla.setBackground(Color.GRAY);
-                    // casillas[fil][col].setBorder(null);      
-
-                } else if (casilla.getId() >= 69 && casilla.getId() < 77) {
-
-                    casilla.setOpaque(true);
-                    casilla.setBackground(Color.YELLOW);
-                    //casillas[fil][col].setBorder(null); 
-
-                } else if (casilla.getId() >= 77 && casilla.getId() < 84) {
-
-                    casilla.setOpaque(true);
-                    casilla.setBackground(Color.BLUE);
-                    //casillas[fil][col].setBorder(null); 
-
-                } else if (casilla.getId() >= 84 && casilla.getId() < 91) {
-                    casilla.setOpaque(true);
-                    casilla.setBackground(Color.RED);
-                    // casillas[fil][col].setBorder(null); 
-
-                } else if (casilla.getId() >= 91 && casilla.getId() < 98) {
-                    casilla.setOpaque(true);
-                    casilla.setBackground(Color.GREEN);
-                    //casillas[fil][col].setBorder(null); 
-
-                } else {
-                    casilla.setOpaque(true);
-                    casilla.setBackground(Color.WHITE);
-                    //casillas[fil][col].setBorder(null);
-                    //casillas[fil][col].setForeground(Color.BLACK);
-                    casilla.setText(casilla.getId() + "");
-                }
-        }
-        pintarDetalles();
-        casilla.setIcon(null);
-        //ponerBordes(fil, col);
-
-    }
-
 }
