@@ -172,7 +172,7 @@ public class Juego {
         estadoJuego = 1;
         turno = "ROJO";
         observadores.firePropertyChange(NUEVA_PARTIDA, null, numJugadores);
-        System.out.println("El estado de la maquina de estados es: " + estadoJuego + " y el turno es: " + turno);
+//        System.out.println("El estado de la maquina de estados es: " + estadoJuego + " y el turno es: " + turno);
     }
 
     public void tirarDado(String color) {
@@ -180,17 +180,20 @@ public class Juego {
             int tirada = buscarJugadorColor(color).tirarDado();
             estadoJuego = 2;
             observadores.firePropertyChange(TIRAR_DADO, color, tirada);
-            System.out.println("El estado de la maquina de estados es: " + estadoJuego + " y el turno es: " + turno);
+//            System.out.println("El estado de la maquina de estados es: " + estadoJuego + " y el turno es: " + turno);
         }
     }
 
     public void moverFicha(String color, int idFicha) {
         if (comprobarTurno(color) && maquinaEstado(2)) { //Pasar a constantes simbolicas.
-            if (comprobarNuevaPosicion(color, idFicha)) {
+            if (comprobarNuevaPosicion(color, idFicha)) {               
+                Ficha fichaAnterior = buscarJugadorColor(color).getFicha(idFicha);
+                int posicionAnterior = buscarJugadorColor(color).getFicha(idFicha).getPosicion();
+                System.out.println("La ficha anterior esta en la posicion " + fichaAnterior.getPosicion());
                 buscarJugadorColor(color).moverFicha(idFicha, devolverNuevaPosicion(color, idFicha));
                 estadoJuego = 3;
-                observadores.firePropertyChange(MOVER_FICHA, new Tupla(color, idFicha), buscarJugadorColor(color).getFicha(idFicha).getPosicion());
-                System.out.println("El estado de la maquina de estados es: " + estadoJuego + " y el turno es: " + turno);
+                observadores.firePropertyChange(MOVER_FICHA, new Tupla(posicionAnterior, idFicha), new Tupla(color, buscarJugadorColor(color).getFicha(idFicha).getPosicion()));
+//                System.out.println("El estado de la maquina de estados es: " + estadoJuego + " y el turno es: " + turno);
                 pasarTurno();
             }
         }
@@ -198,7 +201,8 @@ public class Juego {
     
     private int devolverNuevaPosicion(String color, int idFicha){
         int posicionActual = buscarJugadorColor(color).getFicha(idFicha).getPosicion();
-        return posicionActual + 3;        
+//        System.out.println("La tirada del jugador es: " + buscarJugadorColor(color).getDado().getTirada());
+        return buscarJugadorColor(color).getFicha(idFicha).getPosicion() + buscarJugadorColor(color).getDado().getTirada();        
     }
     
     private boolean comprobarNuevaPosicion(String color, int idFicha){
@@ -221,6 +225,6 @@ public class Juego {
         }
         turno = colores[turnoNuevo].getColor();
         estadoJuego = 1;
-                System.out.println("El estado de la maquina de estados es: " + estadoJuego + " y el turno es: " + turno);
+//                System.out.println("El estado de la maquina de estados es: " + estadoJuego + " y el turno es: " + turno);
     }
 }
