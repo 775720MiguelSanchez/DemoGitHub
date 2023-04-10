@@ -380,6 +380,7 @@ public class TableroVista extends JPanel {
     }
 
     public void anyadirFicha(int idCasilla, FichaVista ficha) {
+        
         devolverCasilla(idCasilla).anyadirFicha(ficha);
 //        pintarFicha(idCasilla, ficha);
     }
