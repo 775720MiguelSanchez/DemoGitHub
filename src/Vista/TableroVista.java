@@ -51,13 +51,13 @@ public class TableroVista extends JPanel {
             {51, 91, 92, 93, 94, 95, 96, 97, 0, 0, 0, 0, 83, 82, 81, 80, 79, 78, 77, 17},
             {51, 91, 92, 93, 94, 95, 96, 97, 0, 0, 0, 0, 83, 82, 81, 80, 79, 78, 77, 17},
             {52, 53, 54, 55, 56, 57, 58, 59, 0, 0, 0, 0, 9, 10, 11, 12, 13, 14, 15, 16},
-            {52, 53, 54, 55, 56, 57, 58, 60, 60, 76, 76, 8, 8, 10, 11, 12, 13, 14, 15, 16},
-            {-4, -4, -4, -4, -4, -4, -4, 61, 61, 75, 75, 7, 7, -3, -3, -3, -3, -3, -3, -3},
-            {-4, -4, -4, -4, -4, -4, -4, 62, 62, 74, 74, 6, 6, -3, -3, -3, -3, -3, -3, -3},
-            {-4, -4, -4, -4, -4, -4, -4, 63, 63, 73, 73, 5, 5, -3, -3, -3, -3, -3, -3, -3},
-            {-4, -4, -4, -4, -4, -4, -4, 64, 64, 72, 72, 4, 4, -3, -3, -3, -3, -3, -3, -3},
-            {-4, -4, -4, -4, -4, -4, -4, 65, 65, 71, 71, 3, 3, -3, -3, -3, -3, -3, -3, -3},
-            {-4, -4, -4, -4, -4, -4, -4, 66, 66, 70, 70, 2, 2, -3, -3, -3, -3, -3, -3, -3},
+            {52, 53, 54, 55, 56, 57, 58, 60, 60, 75, 75, 8, 8, 10, 11, 12, 13, 14, 15, 16},
+            {-4, -4, -4, -4, -4, -4, -4, 61, 61, 74, 74, 7, 7, -3, -3, -3, -3, -3, -3, -3},
+            {-4, -4, -4, -4, -4, -4, -4, 62, 62, 73, 73, 6, 6, -3, -3, -3, -3, -3, -3, -3},
+            {-4, -4, -4, -4, -4, -4, -4, 63, 63, 72, 72, 5, 5, -3, -3, -3, -3, -3, -3, -3},
+            {-4, -4, -4, -4, -4, -4, -4, 64, 64, 71, 71, 4, 4, -3, -3, -3, -3, -3, -3, -3},
+            {-4, -4, -4, -4, -4, -4, -4, 65, 65, 70, 70, 3, 3, -3, -3, -3, -3, -3, -3, -3},
+            {-4, -4, -4, -4, -4, -4, -4, 66, 66, 69, 69, 2, 2, -3, -3, -3, -3, -3, -3, -3},
             {-4, -4, -4, -4, -4, -4, -4, 67, 67, 68, 68, 1, 1, -3, -3, -3, -3, -3, -3, -3}};
     private Casilla casillas[][];
     private JuegoVista juegoVista;
@@ -257,7 +257,7 @@ public class TableroVista extends JPanel {
                             casillas[fil][col].setBackground(Color.GRAY);
                             // casillas[fil][col].setBorder(null);      
 
-                        } else if (casillas[fil][col].getId() > 69 && casillas[fil][col].getId() < 77) {
+                        } else if (casillas[fil][col].getId() >= 69 && casillas[fil][col].getId() < 77) {
 
                             casillas[fil][col].setOpaque(true);
                             casillas[fil][col].setBackground(Color.YELLOW);
@@ -384,9 +384,19 @@ public class TableroVista extends JPanel {
         pintarFicha(idCasilla, ficha);
     }
 
-    public Ficha quitarFicha(int idCasilla) {
-        borrarFicha(idCasilla);
-        return devolverCasilla(idCasilla).quitarFicha();
+    public void quitarFicha(int idFicha, String color) {
+        for (int i = 0; i < casillas.length; i++) {
+            for (int j = 0; j < casillas[i].length; j++) {
+                if (casillas[i][j].getFicha() != null) {
+                    if (casillas[i][j].getFicha().getId() == idFicha && casillas[i][j].getFicha().getColor().equals(color)) {
+                        casillas[i][j].quitarFicha();
+                        borrarFicha(casillas[i][j].getId());
+                    }
+                }
+            }
+        }
+//        borrarFicha(idCasilla);
+//        return devolverCasilla(idCasilla).quitarFicha();
     }
 
     private Casilla devolverCasilla(int idCasilla) {
@@ -404,10 +414,20 @@ public class TableroVista extends JPanel {
         borrarCasilla(devolverCasilla(idCasilla));
     }
 
-    private void pintarFicha(int idCasilla, Ficha ficha) {
+    public void pintarFicha(int idCasilla, Ficha ficha) {
         ImageIcon fichaRoja = new ImageIcon("src/imagenes/ficha_roja.png");
         ImageIcon fichaAmarilla = new ImageIcon("src/imagenes/ficha_amarilla.png");
         Casilla casilla = devolverCasilla(idCasilla);
+        if (casilla.getFicha() != null) {
+            for (int i = 0; i < casillas.length; i++) {
+                for (int j = 0; j < casillas[i].length; j++) {
+                    if (casillas[i][j].getId() == idCasilla && casillas[i][j].getFicha() == null) {
+                        System.out.println("Como la casilla esta llena entra aqui");
+                        casilla = casillas[i][j];
+                    }
+                }
+            }
+        }
         if (ficha.getColor().equals("ROJO")) {
             casilla.setIcon(fichaRoja);
             casilla.setEnabled(true);
@@ -485,7 +505,7 @@ public class TableroVista extends JPanel {
                     casilla.setBackground(Color.GRAY);
                     // casillas[fil][col].setBorder(null);      
 
-                } else if (casilla.getId() > 69 && casilla.getId() < 77) {
+                } else if (casilla.getId() >= 69 && casilla.getId() < 77) {
 
                     casilla.setOpaque(true);
                     casilla.setBackground(Color.YELLOW);
@@ -516,6 +536,7 @@ public class TableroVista extends JPanel {
                 }
         }
         pintarDetalles();
+        casilla.setIcon(null);
         //ponerBordes(fil, col);
 
     }

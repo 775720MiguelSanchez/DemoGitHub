@@ -70,15 +70,12 @@ public class Casilla extends JLabel {
                             break;
                         
                         case "FICHA":
-                            Modelo.Tupla tupla = new Tupla( ficha.getColor(), ficha.getId());
+                            Modelo.Tupla tupla = new Tupla(ficha.getColor(), ficha.getId());
                             juegoVista.notificacion(OyenteVista.Evento.MOVER_FICHA, tupla);
 
                     }
-                    
-
                     //juegoVista.notificacion(OyenteVista.Evento.PONER_FICHA, posicion);         
                 }
-                System.out.println(id);
             }
         });
     }
@@ -98,13 +95,15 @@ public class Casilla extends JLabel {
         }
         return false;
     }
+
+    public Ficha getFicha() {
+        return ficha;
+    }
     
-    public Ficha quitarFicha(){
+    public void quitarFicha(){
         if (ficha != null){
             Ficha fichaQuitada = ficha;
             ficha = null;
-            return fichaQuitada;
         }
-        return null;
     }
 }

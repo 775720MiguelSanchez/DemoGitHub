@@ -64,12 +64,10 @@ public class ParchisLocal implements OyenteVista{
                 break;
             case MOVER_FICHA:
                 Tupla tupla = (Tupla)obj;
-                System.out.println(tupla.a + " " + tupla.b);
                 juego.moverFicha((String)tupla.a, (int)tupla.b);
                 break;
             case TIRAR_DADO:
                 juego.tirarDado((String)obj);
-                System.out.println("Se le ha comunicado al controlador que tiene que tirar los dados");
                 break;
         }
         

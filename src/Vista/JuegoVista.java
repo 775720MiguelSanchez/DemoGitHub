@@ -144,23 +144,21 @@ public class JuegoVista extends JFrame implements ActionListener, PropertyChange
 
     public void notificacion(OyenteVista.Evento evento, Object obj){
         oyenteVista.eventoProducido(evento, obj);
-        System.out.println("JuegoVista se lo va a comunicar al controlador");
-
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(Juego.TIRAR_DADO)){
-            System.out.println("Se tira el dado en la vista, el nuevo valor es: " + evt.getNewValue() + " el turno es " + evt.getOldValue());
             String color = (String)evt.getOldValue();
             tableroVista.obtenerDado(color).setTiradaActual((int)evt.getNewValue());
             tableroVista.pintarDado(color);
         }else if (evt.getPropertyName().equals(Juego.MOVER_FICHA)){
-            Modelo.Tupla tupla = (Modelo.Tupla)evt.getOldValue();
-            int posicion = (int)evt.getNewValue();
-            System.out.println("El color de la ficha es: " + tupla.a + " el id de la ficha es: "+ tupla.b + " la posicion de la ficha es: " + posicion);
-            tableroVista.anyadirFicha((int)tupla.b, new Ficha(posicion, (String)tupla.a));
-            //tableroVista.quitarFicha(posicion);
+            Modelo.Tupla tuplaAntigua = (Modelo.Tupla)evt.getOldValue();
+            Modelo.Tupla tuplaNueva = (Modelo.Tupla)evt.getNewValue();
+            int nuevaPosicion = (int)tuplaNueva.b;
+            tableroVista.quitarFicha((int)tuplaAntigua.b, (String)tuplaNueva.a);
+            tableroVista.anyadirFicha(nuevaPosicion, new Ficha((int)tuplaAntigua.b, (String)tuplaNueva.a));
+            
         }else if(evt.getPropertyName().equals(Juego.NUEVA_PARTIDA)){
             int numJugadores = (int)evt.getNewValue(); 
         }
