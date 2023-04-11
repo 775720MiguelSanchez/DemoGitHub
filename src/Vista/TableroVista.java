@@ -331,12 +331,10 @@ public class TableroVista extends JPanel {
                 left = 2;
             }
         }
-
         if (fila > 0 && fila < 19) {
             if (casillas[fila][columna].getId() != casillas[fila + 1][columna].getId()) {
                 bottom = 2;
             }
-
             if (casillas[fila][columna].getId() != casillas[fila - 1][columna].getId()) {
                 top = 2;
             }
@@ -345,7 +343,6 @@ public class TableroVista extends JPanel {
             if (casillas[fila][columna].getId() != casillas[fila][columna + 1].getId()) {
                 right = 2;
             }
-
             if (casillas[fila][columna].getId() != casillas[fila][columna - 1].getId()) {
                 left = 2;
             }
@@ -362,27 +359,48 @@ public class TableroVista extends JPanel {
             right = 2;
             bottom = 0;
         }
-
         casillas[fila][columna].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.black));
-
     }
 
     private void crearCasillas(int filas, int columnas, boolean recibeEventosRaton) {
-
         casillas = new CasillaVista[filas][columnas];
         for (int fil = 0; fil < filas; fil++) {
             for (int col = 0; col < columnas; col++) {
-                casillas[fil][col]
-                        = new CasillaVista(juegoVista, MATRIZ_CASILLAS[fil][col], recibeEventosRaton);
-                add(casillas[fil][col]);
+                if (MATRIZ_CASILLAS[fil][col] > 0) {
+                    if (existeCasilla(MATRIZ_CASILLAS[fil][col])) {
+                        casillas[fil][col]
+                                = new CasillaVista(juegoVista, MATRIZ_CASILLAS[fil][col], "B", recibeEventosRaton);
+                        add(casillas[fil][col]);
+                    } else {
+                        casillas[fil][col]
+                                = new CasillaVista(juegoVista, MATRIZ_CASILLAS[fil][col], "A", recibeEventosRaton);
+                        add(casillas[fil][col]);
+                    }
+
+                } else {
+                    casillas[fil][col]
+                            = new CasillaVista(juegoVista, MATRIZ_CASILLAS[fil][col], "C", recibeEventosRaton);
+                    add(casillas[fil][col]);
+                }
+
             }
         }
     }
 
+    private boolean existeCasilla(int idCasilla) {
+        if ( devolverCasilla(idCasilla) != null) {
+            return true;
+        }
+        return false;
+    }
+
     public void anyadirFicha(int idCasilla, FichaVista ficha) {
+        if (devolverCasilla(idCasilla).getFicha() == null) {
+            devolverCasilla(idCasilla).anyadirFicha(ficha);
+        }else{
+            devolverCasillaB(idCasilla).anyadirFicha(ficha);
+        }
         
-        devolverCasilla(idCasilla).anyadirFicha(ficha);
-//        pintarFicha(idCasilla, ficha);
     }
 
     public void quitarFicha(int idFicha, String color) {
@@ -400,7 +418,23 @@ public class TableroVista extends JPanel {
     private CasillaVista devolverCasilla(int idCasilla) {
         for (int i = 0; i < casillas.length; i++) {
             for (int j = 0; j < casillas[i].length; j++) {
+                if(casillas[i][j] == null){
+                    return null;
+                }
                 if (casillas[i][j].getId() == idCasilla) {
+                    return casillas[i][j];
+                }
+            }
+        }
+        return null;
+    }
+        private CasillaVista devolverCasillaB(int idCasilla) {
+        for (int i = 0; i < casillas.length; i++) {
+            for (int j = 0; j < casillas[i].length; j++) {
+                if(casillas[i][j] == null){
+                    return null;
+                }
+                if (casillas[i][j].getId() == idCasilla && casillas[i][j].getNumero().equals("B")) {
                     return casillas[i][j];
                 }
             }
