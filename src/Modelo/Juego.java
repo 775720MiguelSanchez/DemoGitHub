@@ -19,6 +19,18 @@ public class Juego {
     public static String MOVER_FICHA = "mover ficha";
     public static String INICIALIZAR_FICHAS = "iniciar fichas";
     public static String NUEVA_PARTIDA = "nueva partida";
+    private static int INICIO_ROJO = 39;
+    private static int INICIO_AMARILLO = 5;
+    private static int INICIO_AZUL = 22;
+    private static int INICIO_VERDE = 56;
+    private static int CASA_ROJO = -1;
+    private static int CASA_AMARILLO = -3;
+    private static int CASA_AZUL = -2;
+    private static int CASA_VERDE = -4;
+    private static int TUBERIA_ROJO = 84;
+    private static int TUBERIA_AMARILLO = 69;
+    private static int TUBERIA_AZUL = 77;
+    private static int TUBERIA_VERDE = 91;
     private PropertyChangeSupport observadores;
     private Jugador[] jugadores;
     private Casilla[] tablero;
@@ -29,13 +41,7 @@ public class Juego {
     private static final int MAXIMO_CASILLAS = 200;
 
     public Juego() {
-//        this.numJugadores = numJugadores;
-//        jugadores = new Jugador[numJugadores];
-//        tablero = new Casilla[MAXIMO_CASILLAS];
         observadores = new PropertyChangeSupport(this);
-//        estadoJuego = 0;
-//        turno = "ROJO";
-        crearPartida(2);
     }
 
     public void nuevoObservador(PropertyChangeListener observador) {
@@ -63,6 +69,7 @@ public class Juego {
         colores = Color.values();
         for (int i = 0; i < numJugadores; i++) {
             jugadores[i] = new Jugador(String.valueOf(i), colores[i], obtenerPosicionInicial(colores[i]));
+            System.out.println("Se crea el jugador " + colores[i]);
         }
     }
 
@@ -163,9 +170,146 @@ public class Juego {
         return estado == estadoJuego;
     }
 
+    /**
+     * Si el jugador tiene fichas y el seguro de la casa no esta bloqueado devuelve true.
+     * @param color
+     * @param idFicha
+     * @return 
+     */
+    private boolean sacarFicha(String color, int idFicha) { //Podríamos plantearnos el metodo que devuelva int para saber si tenemos que sacarFicha, si se saca ficha y se mata o s i no ocurre nada. O a lo mejor el si se saca ficha se mata que sea otro metodo.
+        Jugador jugador = buscarJugadorColor(color);
+        if (jugador.getDado().getTirada() == 5) {
+            Ficha[] fichasJugador = jugador.getFichas();
+            for (int i = 0; i < fichasJugador.length; i++) {
+                if (fichasJugador[i].getEstado().getEstado().equals("CASA")) {//Mirar el método alguna en casa que se ha creado recientemente.
+                    switch (color) {
+                        case "ROJO":
+                            if (!hayDos(INICIO_ROJO)) {//Aqui tendremos que tener en cuenta el caso de que no sean las dos fichas iguales ya que tenemos que matar. Ya se ha creado el metodo dosMismoColor.
+                                return true;
+                            }
+                            break;
+                        case "AMARILLO":
+                            if (!hayDos(INICIO_AMARILLO)) {
+                                return true;
+                            }
+                            break;
+                        case "VERDE":
+                            if (!hayDos(INICIO_VERDE)) {
+                                return true;
+                            }
+                            break;
+                        case "AZUL":
+                            if (!hayDos(INICIO_AZUL)) {
+                                return true;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Este metodo devuelve true si en la casilla existen dos fichas del mismo
+     * color, si no false.
+     *
+     * @param idCasilla
+     * @return
+     */
+    private boolean dosMismoColor(int idCasilla) {
+        Ficha[] fichasEnCasilla = new Ficha[2];
+        int contador = 0;
+        if (buscarCasilla(idCasilla).getNumFichas() == 2) {
+            Color[] colores = new Color[4];
+            colores = Color.values();
+            for (int i = 0; i < numJugadores; i++) {
+                Ficha[] fichas = buscarJugadorColor(colores[i].getColor()).getFichas();
+                if (fichas[i].getPosicion() == idCasilla) {
+                    fichasEnCasilla[contador] = fichas[i];
+                    contador++;
+                }
+            }
+        }
+        if (fichasEnCasilla[0] != null && fichasEnCasilla[1] != null) {
+            if (fichasEnCasilla[0].getColor().equals(fichasEnCasilla[1].getColor())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Si el jugador a sacado un 6 devuelve true. En caso contrario, false.
+     * @param color
+     * @return 
+     */
+    private boolean vuelvoATirar(String color) {
+        if (buscarJugadorColor(color).getDado().getTirada() == 6) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Devuelve true si tiene todas las fichas fuera de casa, si no false.
+     * @param color
+     * @return 
+     */
+    private boolean seisOSiete(String color){
+        if(algunaEnCasa(color)){
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * POSIBLE IDEA: Podríamos hacer el metodo de si muere o no por sacar 3 veces un 6 de manera Recursiva???? Para así tener el control de las tiradas de una manera sencilla o lo podríamos hacer si no con un atributo que al cambio de turno en la máquina de estados se pusiera a 0.
+     */
+    
+    /**
+     * El método devuelve true, si el jugador del que es el turno tiene alguna ficha en casa.
+     * @param color
+     * @return 
+     */
+    private boolean algunaEnCasa(String color) {
+        switch (color) {
+            case "ROJO":
+                if (buscarCasilla(CASA_ROJO).getNumFichas() > 0) {//Aqui tendremos que tener en cuenta el caso de que no sean las dos fichas iguales ya que tenemos que matar.
+                    return true;
+                }
+                break;
+            case "AMARILLO":
+                if (buscarCasilla(CASA_AMARILLO).getNumFichas() > 0) {
+                    return true;
+                }
+                break;
+            case "VERDE":
+                if (buscarCasilla(CASA_VERDE).getNumFichas() > 0) {
+                    return true;
+                }
+                break;
+            case "AZUL":
+                if (buscarCasilla(CASA_AZUL).getNumFichas() > 0) {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    /**
+     * Devuelve true si hay dos fichas en una casilla.Si no, false.
+     * @param idCasilla
+     * @return 
+     */
+    private boolean hayDos(int idCasilla) {
+        return buscarCasilla(idCasilla).getNumFichas() == 2;
+    }
+
     public void crearPartida(int numJugadores) {
         this.numJugadores = numJugadores;
-                tablero = new Casilla[MAXIMO_CASILLAS];
+        tablero = new Casilla[MAXIMO_CASILLAS];
         crearCasillas();
         jugadores = new Jugador[numJugadores];
         crearJugadores(numJugadores);
@@ -186,10 +330,9 @@ public class Juego {
 
     public void moverFicha(String color, int idFicha) {
         if (comprobarTurno(color) && maquinaEstado(2)) { //Pasar a constantes simbolicas.
-            if (comprobarNuevaPosicion(color, idFicha)) {               
+            if (comprobarNuevaPosicion(color, idFicha)) {
                 Ficha fichaAnterior = buscarJugadorColor(color).getFicha(idFicha);
                 int posicionAnterior = buscarJugadorColor(color).getFicha(idFicha).getPosicion();
-                System.out.println("La ficha anterior esta en la posicion " + fichaAnterior.getPosicion());
                 buscarJugadorColor(color).moverFicha(idFicha, devolverNuevaPosicion(color, idFicha));
                 estadoJuego = 3;
                 observadores.firePropertyChange(MOVER_FICHA, new Tupla(posicionAnterior, idFicha), new Tupla(color, buscarJugadorColor(color).getFicha(idFicha).getPosicion()));
@@ -198,28 +341,28 @@ public class Juego {
             }
         }
     }
-    
-    private int devolverNuevaPosicion(String color, int idFicha){
+
+    private int devolverNuevaPosicion(String color, int idFicha) {
         int posicionActual = buscarJugadorColor(color).getFicha(idFicha).getPosicion();
 //        System.out.println("La tirada del jugador es: " + buscarJugadorColor(color).getDado().getTirada());
-        return buscarJugadorColor(color).getFicha(idFicha).getPosicion() + buscarJugadorColor(color).getDado().getTirada();        
+        return buscarJugadorColor(color).getFicha(idFicha).getPosicion() + buscarJugadorColor(color).getDado().getTirada();
     }
-    
-    private boolean comprobarNuevaPosicion(String color, int idFicha){
+
+    private boolean comprobarNuevaPosicion(String color, int idFicha) {
         int posicionActual = buscarJugadorColor(color).getFicha(idFicha).getPosicion();
         return true;
     }
-    
-    public void pasarTurno(){
+
+    public void pasarTurno() {
         Color[] colores = new Color[4];
         colores = Color.values();
         int turnoNuevo = 0;
-        for(int i = 0; i < numJugadores; i++){
-            if(colores[i].getColor().equals(turno)){
-                if(numJugadores - 1 == i){
+        for (int i = 0; i < numJugadores; i++) {
+            if (colores[i].getColor().equals(turno)) {
+                if (numJugadores - 1 == i) {
                     turnoNuevo = 0;
-                }else {
-                    turnoNuevo = i + 1;   
+                } else {
+                    turnoNuevo = i + 1;
                 }
             }
         }

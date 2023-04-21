@@ -86,6 +86,7 @@ public class Jugador {
 
     public void moverFicha(int id, int nuevaPosicion) {
         fichas[id].setPosicion(nuevaPosicion);
+//getFicha(id).setPosicion(nuevaPosicion);
     }
 
 }

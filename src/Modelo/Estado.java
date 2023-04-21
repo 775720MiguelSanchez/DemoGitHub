@@ -18,4 +18,8 @@ public enum Estado {
     Estado(String estado){
         this.estado = estado;
     }
+
+    public String getEstado() {
+        return estado;
+    }
 }

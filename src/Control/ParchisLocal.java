@@ -29,11 +29,8 @@ public class ParchisLocal implements OyenteVista {
     private int numJugadores;
 
     public ParchisLocal() {
-
-        
         vista = JuegoVista.devolverInstancia(this);//De aquí se construye la vista. Esto es lo que tendremos que poner mas adelante una vez seleccionada la partida y aqui tendremos que poner una imagen tipo bienvenidos al parchis blablabla, que haga como de pantalla de bienvenida.
         juego = new Juego();
-
         juego.nuevoObservador(vista);
     }
 
@@ -79,7 +76,6 @@ public class ParchisLocal implements OyenteVista {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
         new ParchisLocal();
     }
 

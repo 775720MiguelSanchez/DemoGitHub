@@ -9,7 +9,7 @@ package Control;
  * @author Miguel
  */
 public interface OyenteVista {
-       public enum Evento { NUEVA_PARTIDA, SALIR, MOVER_FICHA, TIRAR_DADO}
+       public enum Evento { NUEVA_PARTIDA_2, NUEVA_PARTIDA_4, SALIR, MOVER_FICHA, TIRAR_DADO, MOSTRAR_REGLAS}
   
    /**
     *  Llamado para notificar un evento de la interfaz de usuario
