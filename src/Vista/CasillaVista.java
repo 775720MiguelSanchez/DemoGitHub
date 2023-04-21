@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
@@ -18,16 +19,18 @@ import javax.swing.border.BevelBorder;
  *
  * @author Miguel
  */
-public class Casilla extends JLabel {
+public class CasillaVista extends JLabel {
 
     private int id;
+    private String numero;
     private JuegoVista juegoVista;
     private String estado;
-    private Ficha ficha;
+    private FichaVista ficha;
 
-    Casilla(JuegoVista juegoVista, int id, boolean recibeEventosRaton) {
+    CasillaVista(JuegoVista juegoVista, int id, String numero, boolean recibeEventosRaton) {
         this.id = id;
         this.juegoVista = juegoVista;
+        this.numero = numero;
         estado = "VACIO";
         setEnabled(false);
         setHorizontalAlignment(SwingConstants.CENTER);
@@ -39,11 +42,19 @@ public class Casilla extends JLabel {
         }
     }
 
-    public String getEstado(){
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado){
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 
@@ -52,7 +63,8 @@ public class Casilla extends JLabel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (isEnabled()) {
-                    switch(estado){
+                    System.out.println("El estado es: " + estado);
+                    switch (estado) {
                         case "DADO":
                             if (id == -1) {
                                 juegoVista.notificacion(OyenteVista.Evento.TIRAR_DADO, "ROJO");
@@ -66,10 +78,11 @@ public class Casilla extends JLabel {
                             if (id == -4) {
                                 juegoVista.notificacion(OyenteVista.Evento.TIRAR_DADO, "VERDE");
                             }
-                            
+
                             break;
-                        
+
                         case "FICHA":
+                            System.out.println("El color de la ficha es: " + ficha.getId() + " - " + ficha.getColor());
                             Modelo.Tupla tupla = new Tupla(ficha.getColor(), ficha.getId());
                             juegoVista.notificacion(OyenteVista.Evento.MOVER_FICHA, tupla);
 
@@ -84,26 +97,40 @@ public class Casilla extends JLabel {
         return id;
     }
 
-    public void ponerIcono(Icon icono) {
-        setIcon(icono);
-    }
-    
-    public boolean anyadirFicha(Ficha fichaAnyadir){
-        if (ficha == null){
-            this.ficha = fichaAnyadir;
-            return true;
+    public void anyadirFicha(FichaVista fichaAnyadir) {
+        if (ficha == null) {
+            ficha = fichaAnyadir;
+            estado = "FICHA";
+            pintar(ficha);
         }
-        return false;
     }
 
-    public Ficha getFicha() {
+    public FichaVista getFicha() {
         return ficha;
     }
-    
-    public void quitarFicha(){
-        if (ficha != null){
-            Ficha fichaQuitada = ficha;
+
+    public void quitarFicha() {
+        if (ficha != null) {
+            estado = "VACIO";
             ficha = null;
+            setIcon(null);
         }
+    }
+
+    public void pintar(FichaVista ficha) {
+        ImageIcon fichaRoja = new ImageIcon("src/imagenes/ficha_roja.png");
+        ImageIcon fichaAmarilla = new ImageIcon("src/imagenes/ficha_amarilla.png");
+        ImageIcon fichaAzul = new ImageIcon("src/imagenes/ficha_azul.png");
+        ImageIcon fichaVerde = new ImageIcon("src/imagenes/ficha_verde.png");
+        if (ficha.getColor().equals("ROJO")) {
+            setIcon(fichaRoja);
+        } else if (ficha.getColor().equals("AMARILLO")) {
+            setIcon(fichaAmarilla);
+        } else if (ficha.getColor().equals("AZUL")) {
+            setIcon(fichaAzul);
+        } else if (ficha.getColor().equals("VERDE")) {
+            setIcon(fichaVerde);
+        }
+        setEnabled(true);
     }
 }

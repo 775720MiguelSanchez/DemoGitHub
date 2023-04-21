@@ -33,10 +33,10 @@ public class TableroVista extends JPanel {
     private static final int YROJO = 3;
     private static final int XAMARILLO = 16;
     private static final int YAMARILLO = 16;
-    private static final int XAZUL = 16;
-    private static final int YAZUL = 3;
-    private static final int XVERDE = 3;
-    private static final int YVERDE = 16;
+    private static final int XAZUL = 3;
+    private static final int YAZUL = 16;
+    private static final int XVERDE = 16;
+    private static final int YVERDE = 3;
     private static final int ANCHURA_COLUMNA_VERTICAL = 40;
     private static final int MATRIZ_CASILLAS[][]
             = {{-1, -1, -1, -1, -1, -1, -1, 35, 35, 34, 34, 33, 33, -2, -2, -2, -2, -2, -2, -2},
@@ -62,15 +62,17 @@ public class TableroVista extends JPanel {
     private CasillaVista casillas[][];
     private JuegoVista juegoVista;
     private DadoVista dados[];
+    private int numeroJugadores;
     //private boolean habilitado = false; En un futuro para que en el cambio de turno se tenga que poner habilitado si te toca el turno y si no deshabilitado. Introducirlo cuando entren en juego cliente y servidor
 
     public static final boolean RECIBIR_EVENTOS_RATON = true;
     public static final boolean NO_RECIBIR_EVENTOS_RATON = false;
 
-    public TableroVista(JuegoVista juegoVista, int casillas, boolean recibeEventosRaton, int fichas, int dados) {
+    public TableroVista(JuegoVista juegoVista, boolean recibeEventosRaton, int numeroJugadores) {
         this.setEnabled(false);
         this.juegoVista = juegoVista;
-        this.dados = new DadoVista[dados];
+        this.numeroJugadores = numeroJugadores;
+        this.dados = new DadoVista[numeroJugadores];
         this.setEnabled(false);
         this.juegoVista = juegoVista;
 
@@ -81,17 +83,10 @@ public class TableroVista extends JPanel {
 
         pintarCasillas();
         pintarCentro();
-        //pintarDados();
         inicializarFichas();
         inicializarDados();
 
-//        pintarFichas();
-        //setLayout(new GridBagLayout());
-        //crearCasillas(casillas, recibeEventosRaton);
         this.setPreferredSize(new Dimension(21 * ALTURA_FILA_HORIZONTAL, 21 * ANCHURA_COLUMNA_VERTICAL));
-        //crearCasillas(casillas, recibeEventosRaton);
-//        Dimension size = getPreferredSize();
-//        setPreferredSize(size);
 
     }
 
@@ -114,7 +109,8 @@ public class TableroVista extends JPanel {
     public void pintarDado(String color) {
         DadoVista dado = obtenerDado(color);
         if (dado != null) {
-            casillas[dado.getPosicionx()][dado.getPosiciony()].setIcon(new ImageIcon("src/imagenes/dados/" + dado.getColor() + "/" + dado.getTiradaActual() + ".png"));
+            System.out.println("color " + color + " - " + dado.getPosicionx() + " - " + dado.getPosiciony());
+            casillas[dado.getPosicionx()][dado.getPosiciony()].setIcon(new ImageIcon("src/imagenes/dados/" + color + "/" + dado.getTiradaActual() + ".png"));
             casillas[dado.getPosicionx()][dado.getPosiciony()].setEnabled(true);
             casillas[dado.getPosicionx()][dado.getPosiciony()].setEstado("DADO");
         }
@@ -147,6 +143,51 @@ public class TableroVista extends JPanel {
     private void inicializarFichas() {
         ImageIcon fichaRoja = new ImageIcon("src/imagenes/ficha_roja.png");
         ImageIcon fichaAmarilla = new ImageIcon("src/imagenes/ficha_amarilla.png");
+        ImageIcon fichaAzul = new ImageIcon("src/imagenes/ficha_azul.png");
+        ImageIcon fichaVerde = new ImageIcon("src/imagenes/ficha_verde.png");
+        if (numeroJugadores == 4) {
+                    FichaVista ficha9 = new FichaVista(0, "AZUL");
+        casillas[1][14].anyadirFicha(ficha9);
+        casillas[1][14].setIcon(fichaAzul);
+        casillas[1][14].setEnabled(true);
+        casillas[1][14].setEstado("FICHA");
+        FichaVista ficha10 = new FichaVista(1, "AZUL");
+        casillas[1][18].anyadirFicha(ficha10);
+        casillas[1][18].setIcon(fichaAzul);
+        casillas[1][18].setEnabled(true);
+        casillas[1][18].setEstado("FICHA");
+        FichaVista ficha11 = new FichaVista(2, "AZUL");
+        casillas[5][14].anyadirFicha(ficha11);
+        casillas[5][14].setIcon(fichaAzul);
+        casillas[5][14].setEnabled(true);
+        casillas[5][14].setEstado("FICHA");
+        FichaVista ficha12 = new FichaVista(3, "AZUL");
+        casillas[5][18].anyadirFicha(ficha12);
+        casillas[5][18].setIcon(fichaAzul);
+        casillas[5][18].setEnabled(true);
+        casillas[5][18].setEstado("FICHA");
+
+        FichaVista ficha13 = new FichaVista(0, "VERDE");
+        casillas[14][1].anyadirFicha(ficha13);
+        casillas[14][1].setIcon(fichaVerde);
+        casillas[14][1].setEnabled(true);
+        casillas[14][1].setEstado("FICHA");
+        FichaVista ficha14 = new FichaVista(1, "VERDE");
+        casillas[14][5].anyadirFicha(ficha14);
+        casillas[14][5].setIcon(fichaVerde);
+        casillas[14][5].setEnabled(true);
+        casillas[14][5].setEstado("FICHA");
+        FichaVista ficha15 = new FichaVista(2, "VERDE");
+        casillas[18][1].anyadirFicha(ficha15);
+        casillas[18][1].setIcon(fichaVerde);
+        casillas[18][1].setEnabled(true);
+        casillas[18][1].setEstado("FICHA");
+        FichaVista ficha16 = new FichaVista(3, "VERDE");
+        casillas[18][5].anyadirFicha(ficha16);
+        casillas[18][5].setIcon(fichaVerde);
+        casillas[18][5].setEnabled(true);
+        casillas[18][5].setEstado("FICHA");
+        }
         casillas[1][1].setIcon(fichaRoja);
         casillas[1][1].setEnabled(true);
         casillas[1][1].setEstado("FICHA");
@@ -170,6 +211,7 @@ public class TableroVista extends JPanel {
         casillas[14][14].setIcon(fichaAmarilla);
         casillas[14][14].setEnabled(true);
         casillas[14][14].setEstado("FICHA");
+
         FichaVista ficha5 = new FichaVista(0, "AMARILLO");
         casillas[14][14].anyadirFicha(ficha5);
         casillas[14][18].setIcon(fichaAmarilla);
@@ -187,6 +229,7 @@ public class TableroVista extends JPanel {
         casillas[18][18].setEstado("FICHA");
         FichaVista ficha8 = new FichaVista(3, "AMARILLO");
         casillas[18][18].anyadirFicha(ficha8);
+
     }
 
     private void pintarCasillas() {
@@ -254,30 +297,25 @@ public class TableroVista extends JPanel {
                                 || casillas[fil][col].getId() == 29 || casillas[fil][col].getId() == 34) {
 
                             casillas[fil][col].setOpaque(true);
-                            casillas[fil][col].setBackground(Color.GRAY);
-                            // casillas[fil][col].setBorder(null);      
+                            casillas[fil][col].setBackground(Color.GRAY);    
 
                         } else if (casillas[fil][col].getId() >= 69 && casillas[fil][col].getId() < 77) {
 
                             casillas[fil][col].setOpaque(true);
                             casillas[fil][col].setBackground(Color.YELLOW);
-                            //casillas[fil][col].setBorder(null); 
 
                         } else if (casillas[fil][col].getId() >= 77 && casillas[fil][col].getId() < 84) {
 
                             casillas[fil][col].setOpaque(true);
                             casillas[fil][col].setBackground(Color.BLUE);
-                            //casillas[fil][col].setBorder(null); 
 
                         } else if (casillas[fil][col].getId() >= 84 && casillas[fil][col].getId() < 91) {
                             casillas[fil][col].setOpaque(true);
-                            casillas[fil][col].setBackground(Color.RED);
-                            // casillas[fil][col].setBorder(null); 
+                            casillas[fil][col].setBackground(Color.RED); 
 
                         } else if (casillas[fil][col].getId() >= 91 && casillas[fil][col].getId() < 98) {
                             casillas[fil][col].setOpaque(true);
-                            casillas[fil][col].setBackground(Color.GREEN);
-                            //casillas[fil][col].setBorder(null); 
+                            casillas[fil][col].setBackground(Color.GREEN); 
 
                         } else {
                             casillas[fil][col].setOpaque(true);
@@ -388,7 +426,7 @@ public class TableroVista extends JPanel {
     }
 
     private boolean existeCasilla(int idCasilla) {
-        if ( devolverCasilla(idCasilla) != null) {
+        if (devolverCasilla(idCasilla) != null) {
             return true;
         }
         return false;
@@ -397,10 +435,10 @@ public class TableroVista extends JPanel {
     public void anyadirFicha(int idCasilla, FichaVista ficha) {
         if (devolverCasilla(idCasilla).getFicha() == null) {
             devolverCasilla(idCasilla).anyadirFicha(ficha);
-        }else{
+        } else {
             devolverCasillaB(idCasilla).anyadirFicha(ficha);
         }
-        
+
     }
 
     public void quitarFicha(int idFicha, String color) {
@@ -418,7 +456,7 @@ public class TableroVista extends JPanel {
     private CasillaVista devolverCasilla(int idCasilla) {
         for (int i = 0; i < casillas.length; i++) {
             for (int j = 0; j < casillas[i].length; j++) {
-                if(casillas[i][j] == null){
+                if (casillas[i][j] == null) {
                     return null;
                 }
                 if (casillas[i][j].getId() == idCasilla) {
@@ -428,10 +466,11 @@ public class TableroVista extends JPanel {
         }
         return null;
     }
-        private CasillaVista devolverCasillaB(int idCasilla) {
+
+    private CasillaVista devolverCasillaB(int idCasilla) {
         for (int i = 0; i < casillas.length; i++) {
             for (int j = 0; j < casillas[i].length; j++) {
-                if(casillas[i][j] == null){
+                if (casillas[i][j] == null) {
                     return null;
                 }
                 if (casillas[i][j].getId() == idCasilla && casillas[i][j].getNumero().equals("B")) {

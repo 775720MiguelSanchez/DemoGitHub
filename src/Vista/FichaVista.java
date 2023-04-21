@@ -3,11 +3,11 @@ package Vista;
 import javax.swing.JLabel;
 
 
-public class Ficha extends JLabel{
+public class FichaVista extends JLabel{
     private int id;
     private String color;
 
-    public Ficha(int id, String color){
+    public FichaVista(int id, String color){
         this.id = id;
         this.color = color;
     }
